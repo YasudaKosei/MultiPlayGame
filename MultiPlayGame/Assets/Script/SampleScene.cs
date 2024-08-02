@@ -3,10 +3,13 @@ using Photon.Realtime;
 using StarterAssets;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 // MonoBehaviourPunCallbacksを継承して、PUNのコールバックを受け取れるようにする
 public class SampleScene : MonoBehaviourPunCallbacks
 {
+    private const string ROOMNAME_CHARS = "0123456789abcdefghijklmnopqrstuvwxyz";
+
     private void Start()
     {
         PhotonNetwork.SendRate = 20; // 1秒間にメッセージ送信を行う回数
@@ -24,8 +27,18 @@ public class SampleScene : MonoBehaviourPunCallbacks
     //ここでロビーを作ったりマッチングを行う
     public override void OnConnectedToMaster()
     {
-        // "Room"という名前のルームに参加する（ルームが存在しなければ作成して参加する）
-        PhotonNetwork.JoinOrCreateRoom("Room", new RoomOptions(), TypedLobby.Default);
+        if (PlayerPrefs.GetString("RoomFlag") == "Create")
+        {
+            // ルームを作成する
+            string roomName = GenerateRoomID(10);
+            PlayerPrefs.SetString("CreateRoomName", roomName);
+            PhotonNetwork.JoinOrCreateRoom(roomName, new RoomOptions(), TypedLobby.Default);
+        }
+        else
+        {
+            //ルームに参加する
+            PhotonNetwork.JoinRoom(PlayerPrefs.GetString("JoinRoomName"));
+        }
     }
 
     // ゲームサーバーへの接続が成功した時に呼ばれるコールバック
@@ -60,6 +73,7 @@ public class SampleScene : MonoBehaviourPunCallbacks
             thirdPersonController.enabled = true;
             PhotonNetwork.Instantiate("PlayerFlowCamera", position, Quaternion.identity);
             player.GetPhotonView().RPC("SetName", RpcTarget.AllBuffered, PhotonNetwork.NickName + "(マスター)");
+            player.GetPhotonView().RPC("SetRoomName", RpcTarget.AllBuffered, PlayerPrefs.GetString("CreateRoomName"));
         }
         else
         {
@@ -73,5 +87,20 @@ public class SampleScene : MonoBehaviourPunCallbacks
             PhotonNetwork.Instantiate("PlayerFlowCamera", position, Quaternion.identity);
             player.GetPhotonView().RPC("SetName", RpcTarget.AllBuffered, PhotonNetwork.NickName + "(ローカル)");
         }
+    }
+
+    public static string GenerateRoomID(int length)
+    {
+        var sb = new System.Text.StringBuilder(length);
+        var r = new System.Random();
+
+        for (int i = 0; i < length; i++)
+        {
+            int pos = r.Next(ROOMNAME_CHARS.Length);
+            char c = ROOMNAME_CHARS[pos];
+            sb.Append(c);
+        }
+
+        return sb.ToString();
     }
 }

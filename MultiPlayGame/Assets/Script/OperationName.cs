@@ -7,8 +7,9 @@ public class OperationName : MonoBehaviourPunCallbacks
 {
 
     private GameObject namePlate;   //　名前を表示しているプレート
-    public Text otherNameText;   //　名前を表示するテキスト
-    public Text myNameText;
+    public Text otherNameText;   //　ほかの人名前を表示するテキスト
+    public Text myNameText;  //　自分の名前を表示するテキスト
+    public Text roomNameText;  //　ルームの名前を表示するテキスト
 
     void Start()
     {
@@ -28,5 +29,11 @@ public class OperationName : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine) otherNameText.text = name;
         else myNameText.text = name;
+    }
+
+    [PunRPC]
+    void SetRoomName(string name)
+    {
+        roomNameText.text = "Room ID : " + name;
     }
 }
