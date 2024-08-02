@@ -37,6 +37,7 @@ public class SampleScene : MonoBehaviourPunCallbacks
         else
         {
             //ÉãÅ[ÉÄÇ…éQâ¡Ç∑ÇÈ
+            Debug.Log(PlayerPrefs.GetString("JoinRoomName"));
             PhotonNetwork.JoinRoom(PlayerPrefs.GetString("JoinRoomName"));
         }
     }
