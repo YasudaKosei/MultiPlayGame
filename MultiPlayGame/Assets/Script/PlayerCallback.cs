@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class PlayerCallback : MonoBehaviourPunCallbacks
 {
-    // 他プレイヤーがルームへ参加した時に呼ばれるコールバック
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log($"{newPlayer.NickName}が参加しました");
+        Debug.Log($"{newPlayer.NickName}???Q??????????");
     }
 
-    // 他プレイヤーがルームから退出した時に呼ばれるコールバック
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        Debug.Log($"{otherPlayer.NickName}が退出しました");
+        Debug.Log($"{otherPlayer.NickName}?????o????????");
     }
 
 }

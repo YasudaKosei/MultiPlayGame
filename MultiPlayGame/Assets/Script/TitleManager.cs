@@ -7,14 +7,12 @@ using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
-    // Start is called before the first frame update
     public void CreateRoom()
     {
         PlayerPrefs.SetString("RoomFlag", "Create");
         SceneManager.LoadScene("RoomScene");
     }
 
-    // Update is called once per frame
     public void JoinRoom()
     {
         PlayerPrefs.SetString("RoomFlag", "Join");
