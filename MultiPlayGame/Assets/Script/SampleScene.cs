@@ -37,6 +37,7 @@ public class SampleScene : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         MasterClientCheck();
+        PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public void PlayersView()
